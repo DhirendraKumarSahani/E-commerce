@@ -24,6 +24,7 @@ if not User.objects.filter(phone="9999999999").exists():
     )
 
     # optional email
+    username="admin-dhirendra",
     admin.email = "dhirendraroy8882414182@gmail.com"
     admin.is_staff = True
     admin.is_superuser = True
