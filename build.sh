@@ -19,7 +19,7 @@ if not User.objects.filter(phone="8882414182").exists():
 
     admin = User.objects.create_superuser(
         phone="8882414182",
-        password="admin123"
+        password="####ROY@@@@."
     )
 
     admin.email = "dhirendraroy8882414182@gmail.com"
