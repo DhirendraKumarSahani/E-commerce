@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="auth-wrapper">
+
+    <div class="auth-card">
+
+        <!-- ========= HEADER ========= -->
+        <div class="auth-header">
+            <h2>Create Your Account</h2>
+            <p>Join us to enjoy seamless shopping experience</p>
+        </div>
+
+        <!-- ========= FORM ========= -->
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <input type="tel" name="phone" required>
+                <label>Mobile Number</label>
+            </div>
+
+            <div class="form-group">
+                <input type="text" name="username" required>
+                <label>Username</label>
+            </div>
+
+            <div class="form-group">
+                <input type="password" name="password" required>
+                <label>Password</label>
+            </div>
+
+            <div class="form-group">
+                <input type="email" name="email">
+                <label>Email (Optional)</label>
+            </div>
+
+            <button type="submit" class="auth-btn">
+                Register
+            </button>
+
+        </form>
+
+        <!-- ========= INFO ========= -->
+        <div class="auth-note">
+            📧 Adding email is recommended for password reset & order updates.
+        </div>
+
+        {% if error %}
+        <div class="auth-error">
+            {{ error }}
+        </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

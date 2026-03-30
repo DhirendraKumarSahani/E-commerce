@@ -1,0 +1,12 @@
+@media(max-width:768px){
+  img{ width:60px }
+  button{ width:100% }
+}
+.btn.buy-now {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}

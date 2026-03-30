@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="page-title"></h2>
+
+<div class="category-bar">
+    <a href="/" class="cat {% if not request.GET.category %}active{% endif %}">All</a>
+    {% for cat in categories %}
+        <a href="/?category={{ cat.slug }}"
+           class="cat {% if request.GET.category == cat.slug %}active{% endif %}">
+            {{ cat.name }}
+        </a>
+    {% endfor %}
+</div>
+
+
+{% if banners %}
+<section class="hero-slider">
+
+    <button class="slider-btn prev" onclick="slidePrev()">‹</button>
+
+    <div class="slides">
+        {% for banner in banners %}
+        <a href="{{ banner.button_link }}" class="slide">
+            <img src="{{ banner.image.url }}" alt="{{ banner.title }}">
+        </a>
+        {% endfor %}
+    </div>
+
+    <button class="slider-btn next" onclick="slideNext()">›</button>
+
+</section>
+{% endif %}
+
+
+<div class="product-grid">
+    {% for product in products %}
+
+    <article class="product-card">
+
+        {% if product.is_best_seller %}
+            <span class="badge">Best Seller</span>
+        {% endif %}
+
+        <!-- IMAGE SECTION -->
+        <div class="product-image", id="product-{{ product.id }}">
+            <a href="{% url 'product_detail' product.slug %}" class="product-media">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            </a>
+        </div>
+
+        <!-- CONTENT SECTION -->
+        <div class="product-info">
+
+            <h3 class="product-title">
+                {{ product.name|truncatechars:35 }}
+            </h3>
+
+            <p class="price">
+                ₹ {{ product.price }}
+                {% if product.mrp %}<del>₹ {{ product.mrp }}</del>{% endif %}
+            </p>
+
+            <p class="trust-line">✔ Easy Returns</p>
+
+            {% if product.short_description %}
+            <p class="short">
+                {{ product.short_description|truncatechars:120 }}
+            </p>
+            {% endif %}
+
+
+            <div class="product-actions">
+                {% comment %} <a href="{% url 'add_to_cart' product.slug %}" class="btn primary">
+                    Add to Cart
+                </a> {% endcomment %}
+            </div>
+
+        </div>
+
+    </article>
+
+    {% empty %}
+    <p>No products available</p>
+    {% endfor %}
+</div>
+
+
+<!-- ================= FOOTER START ================= -->
+<footer class="pro-footer">
+
+  <div class="pro-footer-wrapper">
+
+    <!-- Brand -->
+    <div class="pro-footer-brand">
+      <h2>MyShop</h2>
+      <p>
+        Building reliable, modern and customer-centric
+        shopping experiences with quality and trust.
+      </p>
+    </div>
+
+    <!-- Links -->
+    <div class="pro-footer-links">
+
+      <div class="pro-footer-col">
+        <h4>Company</h4>
+        <a href="#">About</a>
+        <a href="#">Careers</a>
+        <a href="#">Press</a>
+        <a href="#">Blog</a>
+      </div>
+
+      <div class="pro-footer-col">
+        <h4>Resources</h4>
+        <a href="#">Help Center</a>
+        <a href="#">Guides</a>
+        <a href="#">API Docs</a>
+        <a href="#">Community</a>
+      </div>
+
+      <div class="pro-footer-col">
+        <h4>Business</h4>
+        <a href="#">Sell with Us</a>
+        <a href="#">Affiliates</a>
+        <a href="#">Partnerships</a>
+        <a href="#">Advertising</a>
+      </div>
+
+      <div class="pro-footer-col">
+        <h4>Legal</h4>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms</a>
+        <a href="#">Security</a>
+        <a href="#">Compliance</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Bottom -->
+  <div class="pro-footer-bottom">
+    <span>© 2026 MyShop. All rights reserved.</span>
+
+    <div class="pro-footer-meta">
+      <select>
+        <option>English</option>
+        <option>Hindi</option>
+      </select>
+      <span>🇮🇳 India</span>
+    </div>
+  </div>
+
+</footer>
+
+<!-- ================= FOOTER END ================= -->
+
+
+
+{% endblock %}

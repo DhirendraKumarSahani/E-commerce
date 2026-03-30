@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="cart-title"> Shopping Cart </div>
+
+<div class="cart-summary">
+    <div>
+        <h3>Total Price: ₹ {{ total_price }}</h3>
+        <p>Total Items: {{ total_items }}</p>
+    </div>
+
+    <a href="{% url 'checkout' %}?mode=cart" class="buy-btn">
+        Buy Now ({{ total_items }} items)
+    </a>
+</div>
+
+{% for cart_key, item in cart.items %}
+<div class="cart-item">
+
+    <div class="cart-item-image">
+        {% if item.product_slug %}
+            <a href="{% url 'product_detail' item.product_slug %}">
+                <img src="{{ item.image }}" width="100">
+            </a>
+        {% else %}
+            <img src="{{ item.image }}" width="100">
+        {% endif %}
+    </div>
+
+    <div class="cart-item-details">
+        <h4>{{ item.name }}</h4>
+
+        {% comment %} <!-- 🔴 DEBUG (TEMPORARY) -->
+        <p style="color:red;">Slug Debug: {{ item.product_slug }}</p> {% endcomment %}
+
+        {% if item.size %}
+          <p>Size: {{ item.size }}</p>
+        {% endif %}
+
+        {% if item.color %}
+          <p>Color: {{ item.color }}</p>
+        {% endif %}
+
+        <p>₹ {{ item.price }}</p>
+
+        <div class="qty-box">
+            <a href="{% url 'update_cart' cart_key %}?action=decrease">−</a>
+            <span>{{ item.quantity }}</span>
+            <a href="{% url 'update_cart' cart_key %}?action=increase">+</a>
+        </div>
+
+        <p><strong>Subtotal: ₹ {{ item.subtotal }}</strong></p>
+
+        <a href="{% url 'remove_from_cart' cart_key %}">Delete</a>
+    </div>
+
+</div>
+{% endfor %}
+
+{% endblock %}

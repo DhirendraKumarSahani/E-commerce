@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="tracking-wrapper">
+
+    <!-- ================= HEADER ================= -->
+    <div class="tracking-header">
+        <h2>Order Tracking</h2>
+
+        <div class="tracking-summary">
+            <p><strong>Order ID:</strong> {{ order.order_id }}</p>
+            <p><strong>Current Status:</strong>
+                <span class="status-badge {{ order.order_status|lower }}">
+                    {{ order.order_status }}
+                </span>
+            </p>
+        </div>
+    </div>
+
+
+    <!-- ================= PROGRESS BAR ================= -->
+    <div class="tracking-progress">
+
+        <div class="progress-step {% if order.order_status != 'PLACED' %}active{% endif %}">
+            <div class="circle"></div>
+            <span>Placed</span>
+        </div>
+
+        <div class="progress-line"></div>
+
+        <div class="progress-step {% if order.order_status in 'CONFIRMED SHIPPED DELIVERED' %}active{% endif %}">
+            <div class="circle"></div>
+            <span>Confirmed</span>
+        </div>
+
+        <div class="progress-line"></div>
+
+        <div class="progress-step {% if order.order_status in 'SHIPPED DELIVERED' %}active{% endif %}">
+            <div class="circle"></div>
+            <span>Shipped</span>
+        </div>
+
+        <div class="progress-line"></div>
+
+        <div class="progress-step {% if order.order_status == 'DELIVERED' %}active{% endif %}">
+            <div class="circle"></div>
+            <span>Delivered</span>
+        </div>
+
+    </div>
+
+
+    <!-- ================= TIMELINE ================= -->
+    <div class="tracking-timeline">
+
+        <h3>Order History</h3>
+
+        <div class="timeline-container">
+            {% for h in history %}
+            <div class="timeline-item">
+                <div class="timeline-dot"></div>
+
+                <div class="timeline-content">
+                    <h4>{{ h.status }}</h4>
+                    <p>{{ h.created_at|date:"d M Y, h:i A" }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <p>No tracking updates yet.</p>
+            {% endfor %}
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

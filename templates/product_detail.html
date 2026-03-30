@@ -1,0 +1,226 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="product-detail-container">
+
+  <div class="product-detail-section-1">
+
+    <div class = "image-section">
+
+      <img src="{{ product.image.url }}" width="320" alt="{{ product.name }}" id = "mainProductImage" class="main-image">
+
+      <div class = "image-gallery">
+        {% for img in images %}
+        <img
+          src="{{ img.image.url }}"
+          alt="{{ product.name }}"
+          class="thumbnail"
+          onclick="changeMainImage(this)"
+        >
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="product-detail-section-2">
+
+    <h2>{{ product.name }}</h2>
+    <p>
+      <strong>Price:</strong> ₹<span id="productPrice">{{ product.price }}</span>
+      {% if product.mrp %}
+        <del style="color:gray;">₹{{ product.mrp }}</del>
+      {% endif %}
+    </p>
+
+    {% if product.product_type != 'simple' %}
+
+    <!-- SIZE -->
+    <div class="variant-section">
+      <h4>Size</h4>
+      <div class="variant-options">
+        {% for size in unique_sizes %}
+          <button class="size-btn" data-size="{{ size }}">
+            {{ size }}
+          </button>
+        {% endfor %}
+      </div>
+
+    </div>
+
+    <!-- COLOR -->
+    <div class="variant-section">
+      <h4>Color</h4>
+      <div class="variant-options">
+        {% for v in variants %}
+          <button class="color-btn"
+                  data-size="{{ v.size }}"
+                  data-color="{{ v.color }}"
+                  data-stock="{{ v.stock }}"
+                  data-price="{{ v.price }}">
+            {{ v.color }}
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    <p id="stockInfo">Select size & color</p>
+
+    {% else %}
+
+    <p id="stockInfo">In stock</p>
+
+    {% endif %}
+
+
+    <div class = "short-desc">
+      {% if product.short_description %}
+      <p><strong>Short Description</strong></p>
+      <p>{{ product.short_description }}</p>
+      {% endif %}
+    </div>
+
+    <div class = "action-buttons">
+      <form method="post" action="{% url 'add_to_cart' product.slug %}">
+        {% csrf_token %}
+
+        <input type="hidden" name="size"  id="selectedSize">
+        <input type="hidden" name="color" id="selectedColor">
+        <input type="hidden" name="price" id="selectedPrice">
+        <input type="hidden" name="quantity" value="1">
+
+        <button type="submit" class="btn primary">
+          Add to Cart
+        </button>
+      </form>
+
+      <form method="post" action="{% url 'buy_now' product.slug %}">
+        {% csrf_token %}
+
+        <input type="hidden" name="size"  id="buySize">
+        <input type="hidden" name="color" id="buyColor">
+        <input type="hidden" name="price" id="buyPrice">
+        <input type="hidden" name="stock" id="buyStock">
+        <input type="hidden" name="quantity" value="1">
+
+        <button type="submit" class="btn-buynow">
+          Buy Now
+        </button>
+      </form>
+
+    </div>
+
+    <div class = "product-details">
+      <h3>Product Details</h3>
+      <ul>
+        {% for attr in product.attributes.all %}
+          <li><strong>{{ attr.key }}:</strong> {{ attr.value }}</li>
+        {% empty %}
+          <li>No additional details available</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class = "full-desc">
+      <p><strong>Description</strong></p>
+      <p>{{ product.description }}</p>
+    </div>
+
+  </div>
+</div>
+
+{% comment %}---------------Start Rating Summary (Top Section) --------------------{% endcomment %}
+<div class="rating-summary">
+
+  <div class="avg-rating">
+    <h2>{{ avg_rating }} out of 5</h2>
+    <div class="stars">
+      {% for _ in "12345" %}
+        {% if forloop.counter <= avg_rating %}
+          ⭐
+        {% else %}
+          ☆
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <p>Based on {{ total_reviews }} reviews</p>
+  </div>
+
+  <div class="rating-bars">
+    {% for r in rating_summary %}
+    <div class="rating-bar">
+      <span>{{ r.rating }} ⭐</span>
+      <div class="bar">
+        <div class="fill" style="width: {{ r.count|floatformat:0 }}0%;"></div>
+      </div>
+      <span>{{ r.count }}</span>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+{% comment %}---------------End Rating Summary (Top Section) --------------------{% endcomment %}
+
+
+{% comment %} -------------- Start Reviews List (Ascending / Descending)------------- {% endcomment %}
+<div class="review-list">
+  {% for review in reviews %}
+  <div class="review-card">
+    <div class="review-header">
+      <strong>{{ review.user.username }}</strong>
+      <span>
+        <div class="stars">
+          {% for _ in "12345" %}
+            {% if forloop.counter <= avg_rating %}
+              ⭐
+            {% else %}
+              ☆
+            {% endif %}
+          {% endfor %}
+        </div>
+      </span>
+    </div>
+    <p>{{ review.comment }}</p>
+    <small>Reviewed on {{ review.created_at|date:"M d, Y" }}</small>
+  </div>
+  {% empty %}
+  <p>No reviews yet.</p>
+  {% endfor %}
+</div>
+{% comment %} --------------- Ending Reviews List (Ascending / Descending)----------- {% endcomment %}
+
+
+{% comment %}=============== Start Write Review Form ========================={% endcomment %}
+{% if user.is_authenticated %}
+<form method="post" action="{% url 'submit_review' product.slug %}">
+  {% csrf_token %}
+
+  <div class= "write-review">
+
+    <div class="select-rating">
+      <select name="rating" required>
+        <option value="5">★★★★★ (5)</option>
+        <option value="4">★★★★☆ (4)</option>
+        <option value="3">★★★☆☆ (3)</option>
+        <option value="2">★★☆☆☆ (2)</option>
+        <option value="1">★☆☆☆☆ (1)</option>
+      </select>
+    </div>
+
+    <div class="comment-section">
+      <textarea name="comment" placeholder="Write your review..." required></textarea>
+    </div>
+
+    <button type="submit">Submit Review</button>
+    
+  </div>
+
+</form>
+{% else %}
+<p>Please login to write a review.</p>
+{% endif %}
+
+{% comment %}================ Ending Write Review Form  ==========================={% endcomment %}
+{% endblock %}

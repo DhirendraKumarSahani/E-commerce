@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="checkout-wrapper">
+
+    <!-- =========================
+         PAGE HEADER
+    ========================== -->
+    <div class="checkout-header">
+        <h2>Secure Checkout</h2>
+    </div>
+
+
+    <div class="checkout-layout">
+
+        <!-- =========================
+             LEFT SECTION
+        ========================== -->
+        <div class="checkout-left">
+
+            <!-- =========================
+                 PRODUCT LIST
+            ========================== -->
+            <div class="checkout-products">
+
+                {% if order_source == 'buy_now' %}
+
+                    <div class="checkout-item">
+                        <div class="item-image">
+                            <img src="{{ checkout_item.image }}" alt="{{ checkout_item.name }}">
+                        </div>
+
+                        <div class="item-details">
+                            <h3>{{ checkout_item.name }}</h3>
+
+                            {% if checkout_item.size %}
+                                <p><span>Size:</span> {{ checkout_item.size }}</p>
+                            {% endif %}
+
+                            {% if checkout_item.color %}
+                                <p><span>Color:</span> {{ checkout_item.color }}</p>
+                            {% endif %}
+
+                            <p><span>Quantity:</span> {{ checkout_item.quantity }}</p>
+                            <p><span>Price:</span> ₹{{ checkout_item.price }}</p>
+                        </div>
+                    </div>
+
+                {% elif order_source == 'cart' %}
+
+                    {% for key, item in cart.items %}
+                        <div class="checkout-item">
+                            <div class="item-image">
+                                <img src="{{ item.image }}" alt="{{ item.name }}">
+                            </div>
+
+                            <div class="item-details">
+                                <h3>{{ item.name }}</h3>
+
+                                {% if item.size %}
+                                    <p><span>Size:</span> {{ item.size }}</p>
+                                {% endif %}
+
+                                {% if item.color %}
+                                    <p><span>Color:</span> {{ item.color }}</p>
+                                {% endif %}
+
+                                <p><span>Quantity:</span> {{ item.quantity }}</p>
+                                <p><span>Price:</span> ₹{{ item.price }}</p>
+                                <p><span>Subtotal:</span> ₹{{ item.subtotal }}</p>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                {% else %}
+                    <p>No checkout item found.</p>
+                {% endif %}
+
+            </div>
+
+
+            <!-- =========================
+                 DELIVERY + PAYMENT FORM
+            ========================== -->
+            <form method="post" action="{% url 'place_order' %}" class="checkout-form">
+                {% csrf_token %}
+
+                <!-- DELIVERY ADDRESS -->
+                <div class="form-section">
+                    <h4>Delivery Address</h4>
+
+                    <div class="form-grid">
+                        <input type="text" name="full_name" placeholder="Full Name" required>
+                        <input type="tel" name="phone" placeholder="Phone Number" required>
+                        <input type="email" name="email" placeholder="Email Address" required>
+                        <textarea name="address_line" placeholder="Full Address" required></textarea>
+                        <input type="text" name="city" placeholder="City" required>
+                        <input type="text" name="state" placeholder="State" required>
+                        <input type="text" name="pincode" placeholder="Pincode" required>
+                    </div>
+                </div>
+
+
+                <!-- PAYMENT OPTIONS -->
+                <div class="form-section">
+                    <h4>Payment Method</h4>
+
+                    <div class="payment-options">
+                        <label class="payment-option">
+                            <input type="radio" name="payment_method" value="COD" required>
+                            <span>Cash on Delivery</span>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="payment_method" value="ONLINE">
+                            <span>Online Payment</span>
+                        </label>
+                    </div>
+                </div>
+
+                <input type="hidden" name="order_source" value="{{ order_source }}">
+
+                <button type="submit" class="place-order-btn">
+                    Place Order
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- =========================
+             RIGHT SIDE SUMMARY
+        ========================== -->
+        <div class="checkout-summary">
+
+            <h4>Order Summary</h4>
+
+            <div class="summary-row">
+                <span>Items Total</span>
+                <span>₹{{ total_price }}</span>
+            </div>
+
+            <div class="summary-row">
+                <span>Shipping</span>
+                <span>₹{{ shipping_cost }}</span>
+            </div>
+
+            <div class="summary-divider"></div>
+
+            <div class="summary-total">
+                <span>Total Payable</span>
+                <span>₹{{ grand_total }}</span>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
