@@ -6,25 +6,23 @@ python manage.py migrate
 
 
 # 🔥 ONE-TIME ADMIN RESET LOGIC
+
 python manage.py shell << END
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-# 🔴 CHECK FLAG (IMPORTANT)
-if not User.objects.filter(phone="9999999999").exists():
+if not User.objects.filter(username="admin").exists():
 
     print("🔥 First time setup: deleting all users...")
 
     User.objects.all().delete()
 
-    # ✅ CREATE ADMIN
     admin = User.objects.create_superuser(
-        phone="8882414182",
+        username="DhirendraKumar",
         password="####ROY@@@@."
     )
 
-    # optional email
-    username="admin-dhirendra",
+    admin.phone = "8882414182"
     admin.email = "dhirendraroy8882414182@gmail.com"
     admin.is_staff = True
     admin.is_superuser = True
@@ -33,6 +31,6 @@ if not User.objects.filter(phone="9999999999").exists():
     print("✅ Admin created successfully")
 
 else:
-    print("⚡ Already initialized — skipping reset")
+    print("⚡ Already initialized")
 
 END
