@@ -165,6 +165,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 #-------------------------------------------------
 # Media files (User-uploaded content)
 #STEP-5: Image Support Enable Karna (IMPORTANT)
