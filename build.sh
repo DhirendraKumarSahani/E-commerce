@@ -11,14 +11,14 @@ python manage.py shell << END
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+# ✅ Check if admin already exists
 if not User.objects.filter(phone="8882414182").exists():
 
-    print("🔥 First time setup: deleting all users...")
-
-    User.objects.all().delete()
+    print("🚀 Creating Admin User...")
 
     admin = User.objects.create_superuser(
-        phone="8882414182",
+        username="dhirendra",        # required (manager ke liye)
+        phone="8882414182",      # required (tumhare model ke liye)
         password="####ROY@@@@."
     )
 
@@ -30,6 +30,6 @@ if not User.objects.filter(phone="8882414182").exists():
     print("✅ Admin created successfully")
 
 else:
-    print("⚡ Already initialized")
+    print("⚡ Admin already exists")
 
 END
