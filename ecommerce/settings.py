@@ -15,8 +15,6 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
-from dotenv import load_dotenv
-load_dotenv()
 
 # https://res.cloudinary.com/dcwhvaahd/image/upload/f_auto,q_auto/Promo-Facebook-Facebook_right_column_ylhlq0
 
@@ -26,15 +24,22 @@ CLOUDINARY_STORAGE = {
     'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
 }
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
-print("CLOUD NAME:", os.getenv('CLOUDINARY_CLOUD_NAME'))
-
 cloudinary.config(
     cloud_name=CLOUDINARY_STORAGE['CLOUD_NAME'],
     api_key=CLOUDINARY_STORAGE['API_KEY'],
     api_secret=CLOUDINARY_STORAGE['API_SECRET']
 )
+
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+
 
 
 from pathlib import Path
@@ -166,8 +171,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
