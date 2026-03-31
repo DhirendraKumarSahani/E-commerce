@@ -194,5 +194,3 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 #-------------------------------------------------
-
-print(p.image.url) 
