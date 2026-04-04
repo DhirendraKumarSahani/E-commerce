@@ -3085,7 +3085,6 @@ ENDING OF RESET PASSWORD – PROFESSIONAL UI
 
     /* ---------- Sticky Summary ---------- */
     .cart-summary {
-        position: sticky !important;
         top: 0;
         z-index: 20;
         background: #ffffff;
@@ -3096,6 +3095,12 @@ ENDING OF RESET PASSWORD – PROFESSIONAL UI
         display: flex !important;
         flex-direction: column !important;
         gap: 10px !important;
+    }
+
+    .cart-summary {
+        float: none !important;   /* ✅ ADD THIS */
+        width: 100% !important;   /* ✅ FULL WIDTH */
+        position: static !important; /* sticky hata do */
     }
 
     .cart-summary h3 {

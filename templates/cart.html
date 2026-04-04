@@ -3,16 +3,6 @@
 
 <div class="cart-title"> Shopping Cart </div>
 
-<div class="cart-summary">
-    <div>
-        <h3>Total Price: ₹ {{ total_price }}</h3>
-        <p>Total Items: {{ total_items }}</p>
-    </div>
-
-    <a href="{% url 'checkout' %}?mode=cart" class="buy-btn">
-        Buy Now ({{ total_items }} items)
-    </a>
-</div>
 
 {% for cart_key, item in cart.items %}
 <div class="cart-item">
@@ -56,5 +46,16 @@
 
 </div>
 {% endfor %}
+
+<div class="cart-summary">
+    <div>
+        <h3>Total Price: ₹ {{ total_price }}</h3>
+        <p>Total Items: {{ total_items }}</p>
+    </div>
+
+    <a href="{% url 'checkout' %}?mode=cart" class="buy-btn">
+        Buy Now ({{ total_items }} items)
+    </a>
+</div>
 
 {% endblock %}
