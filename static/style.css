@@ -3085,14 +3085,21 @@ ENDING OF RESET PASSWORD – PROFESSIONAL UI
 
     /* ---------- Sticky Summary ---------- */
     .cart-summary {
-        position: sticky !important;
-        top: 0;
-        z-index: 20;
+        position: static !important;   /* ❌ sticky hatao */
+        float: none !important;        /* ❌ desktop float remove */
+
+        order: -1;                     /* ✅ TOP pe le aao */
+
+        width: 95%;
+        max-width: 420px;              /* ✅ professional width */
+        margin: 10px auto 20px;
+
         background: #ffffff;
         padding: 16px !important;
         border-radius: 10px !important;
-        margin-bottom: 18px !important;
+
         box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+
         display: flex !important;
         flex-direction: column !important;
         gap: 10px !important;
@@ -3130,11 +3137,13 @@ ENDING OF RESET PASSWORD – PROFESSIONAL UI
 
     /* ---------- Cart Item Card ---------- */
     .cart-item {
+        width: 95% !important;
+        max-width: 420px;     /* ✅ same width as summary */
+        margin: 0 auto 15px !important;
         display: flex !important;
         flex-direction: row !important;
         gap: 12px !important;
         padding: 15px !important;
-        margin-bottom: 15px !important;
         border-radius: 10px !important;
         background: #fafafa;
         box-shadow: 0 4px 12px rgba(0,0,0,0.04);
